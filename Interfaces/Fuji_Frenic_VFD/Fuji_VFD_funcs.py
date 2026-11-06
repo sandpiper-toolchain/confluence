@@ -157,6 +157,7 @@ class VFD():
         except Exception as e:
             # print(e)
             self.comm_errors = self.comm_errors + 1
+            raise
 
     def start_motor(self):
         start_command = int(b'0000000000000001',2)
@@ -165,6 +166,7 @@ class VFD():
         except Exception as e:
             self.comm_errors = self.comm_errors + 1
             print(e)
+            raise
 
     def stop_motor(self):
         stop_command = int(b'0000000000000000',2)
@@ -173,6 +175,7 @@ class VFD():
         except Exception as e:
             print(e)
             self.comm_errors = self.comm_errors + 1
+            raise
 
     def clear_faults(self):
         # self.comm.write_bit(2,1,functioncode=5)
@@ -184,6 +187,7 @@ class VFD():
             self.comm.write_register(1798,command,0)
         except Exception as e:
             print(e)
+            raise
         # self.comm.write_bit(2,1,functioncode=5)
 
     def poll_monitoring(self):
@@ -203,6 +207,15 @@ class VFD():
         except Exception as e:
             print('\nError Polling Monitoring Data:')
             print(f"{e}\n")
+            self.comm_errors = self.comm_errors + 1
+            self.freq_reference_perc         = float('nan')
+            self.frequency_reference    = float('nan')
+            self.output_freq_perc       = float('nan')
+            self.output_freq            = float('nan')
+            self.input_power            = float('nan')
+            self.output_current_effective = float('nan')
+            self.output_voltage_effective = float('nan')
+            self.heat_sink_temp = float('nan')
    
     def poll_status(self):
         self.poll_state()
@@ -217,13 +230,13 @@ class VFD():
             "freq perc of max":f"{self.freq_reference_perc*100:0.2f} %",
             "freq reference":f"{self.frequency_reference:0.2f} Hz",
             "output freq":f"{self.output_freq:0.2f} Hz",
-            "input power":f"{self.input_power:0.2f} kW?",
+            "input power":f"{self.input_power:0.2f} kW",
             "output current":f"{self.output_current_effective} amps",
             "output voltage":f"{self.output_voltage_effective} volts",
             "heat sink temperature":f"{self.heat_sink_temp} degC"
         }
 
-        print(self.status)
+        # print(self.status)
 
 
 if __name__ == '__main__':
