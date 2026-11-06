@@ -1,12 +1,14 @@
 {
     "Node Name": "SAFL Confluence Node 1",
     "Active Interfaces": [
+        "Massa_Ultrasonic",
+        "Fuji_Frenic_VFD",
         "NodeStats"
     ],
     "Fuji_Frenic_VFD": {
         "device name": "Pump VFD",
         "comms": {
-            "com port": "COM3",
+            "com port": "/dev/fuji_frenic_vfd",
             "serverID": 1,
             "baudrate": 19200,
             "bytesize": 8,
@@ -29,7 +31,7 @@
             0
         ],
         "comms": {
-            "com port": "COM8",
+            "com port": "/dev/massa_ultrasonic",
             "ids": [
                 1
             ]
