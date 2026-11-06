@@ -1,6 +1,6 @@
 # import Interfaces.Massa_Ultrasonic as Massa_Ultrasonic
 import json
-from Interfaces.Scheduler import scheduler
+from Interfaces.Scheduler import scheduler, watchdog
 import importlib
 
 # scheduler = BlockingScheduler()
@@ -15,6 +15,8 @@ def schedule_jobs():
     # Add A job for each active interfaces. The name of the interface in the confluence_config.json file must match the name (case sensitive) of the module folder in the Interfaces Directory.
     for io in active_interfaces:
         importlib.import_module(f"Interfaces.{io}")
+
+    watchdog.start()
 
     try:
         print("APScheduler started with parameterized jobs...")

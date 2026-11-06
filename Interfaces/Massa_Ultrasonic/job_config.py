@@ -2,7 +2,7 @@ from .Massa_funcs import massa
 import json
 from Interfaces.MQTT import broker
 import pandas as pd
-from Interfaces.Scheduler import scheduler
+from Interfaces.Scheduler import scheduler, watchdog
 
 with open("./confluence_config.json",'r') as fid:
     configs = json.load(fid)
@@ -35,6 +35,8 @@ def task():
     none
     """
     massas.poll_status()
+    # poll_status() sets the error array to NaN floats when the read raised.
+    watchdog.report(interface, all(isinstance(e, str) for e in massas.error_array))
     broker.publish_message(topic=f"{node}/{interface}",payload=pd.Series(massas.status).to_json())
     # print(pd.Series(massas.status).to_json()) # Using the pandas to_json instead of json.dumps handles converting to NAN to null.  JSON format doesn't support NANs.
 if publish_configs['type'] == 'cron':
@@ -57,4 +59,5 @@ elif publish_configs['type'] =='interval':
     }
 
 
+watchdog.register(interface)
 scheduler.add_job(**job_configuration)

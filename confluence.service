@@ -8,7 +8,7 @@ Requires=mosquitto.service
 Type=simple
 User=oak
 WorkingDirectory=/home/oak/confluence
-ExecStart=/home/oak/.lagunavenv/bin/python confluence_daemon.py
+ExecStart=/home/oak/.lagunavenv/bin/python -u confluence_daemon.py
 Restart=on-failure
 RestartSec=5
 

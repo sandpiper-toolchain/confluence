@@ -2,7 +2,7 @@ from .Fuji_VFD_funcs import VFD
 import json
 from Interfaces.MQTT import broker
 import pandas as pd
-from Interfaces.Scheduler import scheduler
+from Interfaces.Scheduler import scheduler, watchdog
 
 with open("./confluence_config.json",'r') as fid:
     configs = json.load(fid)
@@ -62,6 +62,7 @@ def task():
     none
     """
     frenic_vfd.poll_status()
+    watchdog.report(interface, frenic_vfd.state_message != 'Error getting status')
 
     broker.publish_message(topic=f"{node}/{interface}",payload=pd.Series(frenic_vfd.status).to_json())
     # print(pd.Series(frenic_vfd.status).to_json())
@@ -86,4 +87,5 @@ elif publish_configs['type'] =='interval':
     }
 
 
+watchdog.register(interface)
 scheduler.add_job(**job_configuration)

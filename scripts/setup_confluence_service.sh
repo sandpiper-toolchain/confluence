@@ -136,7 +136,7 @@ $BROKER_UNIT_LINES
 Type=simple
 User=$SERVICE_USER
 WorkingDirectory=$REPO_DIR
-ExecStart=$VENV_DIR/bin/python confluence_daemon.py
+ExecStart=$VENV_DIR/bin/python -u confluence_daemon.py
 Restart=on-failure
 RestartSec=5
 
