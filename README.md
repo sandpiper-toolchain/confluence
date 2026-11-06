@@ -66,9 +66,21 @@ something later.  When setting up a new node, run both of these scripts.
   including `--remote-broker` for the common case where this node doesn't
   run its own Mosquitto but is publishing to an MQTT broker hosted on a different device. 
 
-  After running the script, if you didn't pass the `--start` flag, you need to start the service with: `sudo systemctl start confluence`.  It will automatically start on boot if the system restarts.
+  After running the script, if you didn't pass the `--start` flag, you need to start the service with: `sudo systemctl start confluence`.  It will automatically start on boot if the system restarts. If you make changes to `confluence_config.json` or any of the code you will need to restart the service with the command: `sudo systemctl restart confluence`.
 
-  If you make changes to `confluence_config.json` or any of the code you will need to restart the service with the command: `sudo systemctl restart confluence`
+  **Monitoring the running service for errors:**  
+  When confluence is running as a service, it will not print errors to the terminal automatically. Errors are logged using systemd's logging utility: `journalctl`. To view live logs in real time use the following command: 
+
+  `sudo journalctl -u confluence.service -f`
+
+  or to view the last 50 lines of the log:
+
+  `sudo journalctl -u confluence.service -n 50 --no-pager`
+
+  or to view logs generated only during the current boot:
+  
+  `sudo journalctl -u confluence.service -b`
+
 
 Neither set up script touches `confluence_config.json` — that file is
   per-node/per-hardware and still needs to be written by hand (or copied
